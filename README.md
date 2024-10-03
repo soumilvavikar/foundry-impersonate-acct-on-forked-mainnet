@@ -1,66 +1,44 @@
-## Foundry
+# Simple Test Contract to Impersonate a Whale Account
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This project provides a simple example of how to interact with the USDC token contract, impersonate a whale account, transfer tokens, and verify the transaction's success on a forked Ethereum blockchain.
 
-Foundry consists of:
+## Initial Setup
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
+### Create a new project
 
 ```shell
-$ forge build
+forge init
 ```
 
-### Test
+Remove the default files from the src, script, and test folders.
+
+### Setup the `.env` file
+
+Create a `.env` file, please refer to the `.env.sample` file. Once the file is prepared, execute the following command.
 
 ```shell
-$ forge test
+source .env
 ```
 
-### Format
+**NOTE**: We need to execute this command on both the terminal windows
+  
+- One for running forked instance of the mainnet on anvil local chain
+- One for running the test commands
+
+## Start the forked instance of Mainnet
 
 ```shell
-$ forge fmt
+# This command will start the local anvil chain forked from mainnet
+anvil --fork-url $INFURA_RPC_URL --fork-block-number $FORKED_BLOCK_NUMBER
+
+# Validate that the correct block number has been used for forking.
+cast block-number
 ```
 
-### Gas Snapshots
+## Run the Test which Impersonates the Whale Account
 
 ```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+forge test --rpc-url $RPC_URL --mt testTokenTransfer  -vvvv
+# OR
+forge test --rpc-url $RPC_URL
 ```
